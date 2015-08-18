@@ -1,0 +1,9 @@
+port: 69
+user: hooktftp
+hooks:
+- type: http
+  regexp: (pcbios)/.*
+  template: https://github.com/steigr/ipxe-builds/raw/master/$1/ipxe.pxe
+- type: http
+  regexp: (i386|x86_64)-efi/.*
+  template: https://github.com/steigr/ipxe-builds/raw/master/$1-efi/ipxe.efi
