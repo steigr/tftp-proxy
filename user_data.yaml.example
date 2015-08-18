@@ -1,0 +1,12 @@
+#cloud-config
+---
+coreos:
+  units:
+  - name: tftp-proxy.service
+    runtime: yes
+    drop-ins:
+    - name: 10-tftp-proxy-opts.conf
+      content: |-
+        [Service]
+        ExecStartPre=/usr/bin/curl -fsSLo /run/tftp.yml https://raw.githubusercontent.com/steigr/tftp-proxy/master/proxy.yml
+        Environment=TFTP_PROXY_OPTS=-v /run/tftp.yml /etc/hooktftp.yml

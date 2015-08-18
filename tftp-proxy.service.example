@@ -1,0 +1,14 @@
+[Unit]
+Description=TFTP Proxy
+Requires=early-docker.service
+After=early-docker.service
+Before=early-docker.target
+
+[Service]
+Restart=always
+RestartSec=5
+Environment=DOCKER_HOST=unix:///run/early-docker.sock
+Environment=TFTP_PROXY_OPTS=
+ExecStartPre=-/bin/sh -c "find /sys/class/net/*/ -name device | awk -F/ '{print $5}' | xargs -n1 -ID ip addr add 169.254.169.251/16 scope link dev D"
+ExecStartPre=/usr/bin/docker pull steigr/tftp-proxy
+ExecStart=/usr/bin/docker run --rm --net=host ${TFTP_PROXY_OPTS} steigr/tftp-proxy
